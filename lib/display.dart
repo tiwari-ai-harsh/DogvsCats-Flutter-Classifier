@@ -1,3 +1,4 @@
+import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'dart:io' as Io;
 import 'package:image/image.dart' as im;
@@ -15,31 +16,87 @@ class DisplayPicture extends StatefulWidget {
 class _DisplayPictureState extends State<DisplayPicture> {
   var results;
 
+//  getResults();
+  var isCaculating = false;
+
   @override
   Widget build(BuildContext context) {
+//    getResults();
+
     return Scaffold(
-      appBar: AppBar(title: Text('Picture')),
+      appBar: AppBar(
+//        leading: Container(),
+        title: Text('Dogs Vs Cats'),
+        centerTitle: true,
+      ),
       body: Column(
         children: <Widget>[
           Image.file(Io.File(widget.imagePath)),
-          results == null
-              ? Text('Identify what\'s here with that button!!')
-              : Text(
-                  '${results}',
-                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
-                )
+          Column(
+            children: <Widget>[
+              isCaculating == false
+                  ? Center(
+                      child: Text('Press Bottom Button to Calculate'),
+                    )
+                  : results == null
+                      ? Center(
+                          child: Column(
+                            children: <Widget>[
+                              CircularProgressIndicator(),
+                              Text('Calculating...')
+//                      Text('Press bottom button to Calculate.')
+                            ],
+                          ),
+                        )
+                      : Center(
+                          child: Column(
+                            children: <Widget>[
+                              Text('It is a:'),
+                              Text(
+                                '${results}',
+                                style: TextStyle(
+                                    fontSize: 30, fontWeight: FontWeight.w900),
+                              )
+                            ],
+                          ),
+                        )
+            ],
+          ),
+//              ? Text('Identify what\'s here with that button!!')
+//              : Text(
+//                  '${results}',
+//                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
+//                )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.present_to_all),
-        onPressed: () {
-          getResults();
-        },
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 20.0, left: 20.0),
+        child: Row(
+          children: <Widget>[
+            FloatingActionButton.extended(
+              tooltip: 'Tap to Calculate',
+              label: Text('Calculate'),
+              icon: Icon(Icons.memory),
+
+//          child: Text('Calculate'),
+              onPressed: () {
+                setState(() {
+                  results = null;
+                  isCaculating = true;
+                });
+//          Navigator.of(context).pop();
+                getResults();
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Future getResults() async {
+    Future.delayed(Duration(milliseconds: 10000));
     String res = await Tflite.loadModel(
         model: "assets/cat_dog.tflite",
         labels: "assets/labels.txt",

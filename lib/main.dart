@@ -45,7 +45,7 @@ class CameraState extends State<Camera> {
     super.initState();
     _controller = CameraController(
       widget.camera,
-      ResolutionPreset.medium,
+      ResolutionPreset.high,
     );
 
     _initializeControllerFuture = _controller.initialize();
@@ -60,7 +60,7 @@ class CameraState extends State<Camera> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Take a Picture')),
+//      appBar: AppBar(title: Text('Take a Picture')),
       body: FutureBuilder<void>(
         future: _initializeControllerFuture,
         builder: (context, snapshot) {
@@ -71,29 +71,34 @@ class CameraState extends State<Camera> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.camera_alt),
-        onPressed: () async {
-          try {
-            await _initializeControllerFuture;
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
-            final path = join(
-              (await getTemporaryDirectory()).path,
-              '${DateTime.now()}.jpg',
-            );
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 20.0),
+        child: FloatingActionButton(
+          child: Icon(Icons.camera_alt),
+          onPressed: () async {
+            try {
+              await _initializeControllerFuture;
 
-            await _controller.takePicture(path);
+              final path = join(
+                (await getTemporaryDirectory()).path,
+                '${DateTime.now()}.jpg',
+              );
 
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => DisplayPicture(imagePath: path),
-              ),
-            );
-          } catch (e) {
-            print(e);
-          }
-        },
+              await _controller.takePicture(path);
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DisplayPicture(imagePath: path),
+                ),
+              );
+            } catch (e) {
+              print(e);
+            }
+          },
+        ),
       ),
     );
   }
