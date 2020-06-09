@@ -1,16 +1,20 @@
-# Camera Example
+# Cats-Vs-Dogs classifier.
 
-A new Flutter project.
+Created Cats-vs-Dogs classifer as a Hello World Example of Deep Learning on Mobile Devices. I trained Convolutional Neural Network to Kaggle Dataset kaggle biaiscience/dogs-vs-cats.
 
-## Getting Started
+## Some screenshots are given below.
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+### 1) Camera Interface
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+![Camera](screenshots/camera.jpeg)
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+### 2) Classification
+
+![Classification](screenshots/classifier.jpeg)
+
+### 3) Predicted Dog
+![Classification](screenshots/dog.jpeg)
+
+### 4) Predicted Cat
+![Classification](screenshots/cat.jpeg)
