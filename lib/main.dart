@@ -1,10 +1,7 @@
-import 'dart:async';
-import 'dart:io';
-
-import 'package:camera/camera.dart';
-import 'package:camera_app/display.dart';
+import 'package:dogs_vs_cats_app/display.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart' show join;
+import 'package:camera/camera.dart';
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
 Future<void> main() async {
@@ -23,6 +20,7 @@ Future<void> main() async {
     ),
   );
 }
+
 
 class Camera extends StatefulWidget {
   final CameraDescription camera;
@@ -85,9 +83,7 @@ class CameraState extends State<Camera> {
                 (await getTemporaryDirectory()).path,
                 '${DateTime.now()}.jpg',
               );
-
               await _controller.takePicture(path);
-
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -103,4 +99,3 @@ class CameraState extends State<Camera> {
     );
   }
 }
-

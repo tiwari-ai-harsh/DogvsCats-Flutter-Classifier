@@ -15,17 +15,13 @@ class DisplayPicture extends StatefulWidget {
 
 class _DisplayPictureState extends State<DisplayPicture> {
   var results;
-
-//  getResults();
   var isCaculating = false;
 
   @override
   Widget build(BuildContext context) {
-//    getResults();
 
     return Scaffold(
       appBar: AppBar(
-//        leading: Container(),
         title: Text('Dogs Vs Cats'),
         centerTitle: true,
       ),
@@ -36,37 +32,31 @@ class _DisplayPictureState extends State<DisplayPicture> {
             children: <Widget>[
               isCaculating == false
                   ? Center(
-                      child: Text('Press Bottom Button to Calculate'),
-                    )
+                child: Text('Press Bottom Button to Calculate'),
+              )
                   : results == null
-                      ? Center(
-                          child: Column(
-                            children: <Widget>[
-                              CircularProgressIndicator(),
-                              Text('Calculating...')
-//                      Text('Press bottom button to Calculate.')
-                            ],
-                          ),
-                        )
-                      : Center(
-                          child: Column(
-                            children: <Widget>[
-                              Text('It is a:'),
-                              Text(
-                                '${results}',
-                                style: TextStyle(
-                                    fontSize: 30, fontWeight: FontWeight.w900),
-                              )
-                            ],
-                          ),
-                        )
+                  ? Center(
+                child: Column(
+                  children: <Widget>[
+                    CircularProgressIndicator(),
+                    Text('Calculating...')
+                  ],
+                ),
+              )
+                  : Center(
+                child: Column(
+                  children: <Widget>[
+                    Text('It is a:'),
+                    Text(
+                      '${results}',
+                      style: TextStyle(
+                          fontSize: 30, fontWeight: FontWeight.w900),
+                    )
+                  ],
+                ),
+              )
             ],
           ),
-//              ? Text('Identify what\'s here with that button!!')
-//              : Text(
-//                  '${results}',
-//                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
-//                )
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -78,14 +68,11 @@ class _DisplayPictureState extends State<DisplayPicture> {
               tooltip: 'Tap to Calculate',
               label: Text('Calculate'),
               icon: Icon(Icons.memory),
-
-//          child: Text('Calculate'),
               onPressed: () {
                 setState(() {
                   results = null;
                   isCaculating = true;
                 });
-//          Navigator.of(context).pop();
                 getResults();
               },
             ),
@@ -98,10 +85,10 @@ class _DisplayPictureState extends State<DisplayPicture> {
   Future getResults() async {
     Future.delayed(Duration(milliseconds: 10000));
     String res = await Tflite.loadModel(
-        model: "assets/cat_dog.tflite",
+        model: "assets/converted_model.tflite",
         labels: "assets/labels.txt",
         numThreads: 1 // defaults to 1
-        );
+    );
     var recognitions = await Tflite.runModelOnImage(
         path: widget.imagePath,
         // required
@@ -114,20 +101,11 @@ class _DisplayPictureState extends State<DisplayPicture> {
         threshold: 0.2,
         // defaults to 0.1
         asynch: true // defaults to true
-        );
-//    await Tflite.close();
+    );
     print(recognitions);
     setState(() {
       results = recognitions[0]['label'];
     });
     return recognitions;
-  }
-
-  void resizeImage() {
-    im.Image image =
-        im.decodeImage(new Io.File(widget.imagePath).readAsBytesSync());
-
-    im.Image thumbnail = im.copyResize(image, width: 160, height: 160);
-    new Io.File(widget.imagePath)..writeAsBytesSync(im.encodePng(thumbnail));
   }
 }
